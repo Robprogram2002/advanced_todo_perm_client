@@ -12,16 +12,15 @@ const userSlice = createSlice({
     authenticated: false,
   },
   reducers: {},
-  extraReducers: {
-    [singIn.fulfilled]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(singIn.fulfilled, (state, action) => {
       const { user, token } = action.payload;
       state.uuid = user.uuid;
       state.email = user.email;
       state.username = user.username;
-      state.imageUrl = user.imageUrl;
       state.authToken = token;
       state.authenticated = true;
-    },
+    });
   },
 });
 

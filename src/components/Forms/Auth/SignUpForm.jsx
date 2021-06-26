@@ -2,18 +2,24 @@ import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { BiUser } from 'react-icons/bi';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { BlackLinkText } from '../../StyledComponents/styled';
+import { useHistory } from 'react-router-dom';
 import { FormButton } from '../../StyledComponents/FormStyles';
 import { Column } from '../../StyledComponents/ContainerStyles';
 import TextField from '../TextField';
 import globalColors from '../../../styles/color_constants';
 import InputErrorText from '../InputErrorText';
 
-import { singIn } from '../../../store/user_actions';
+import { signUp } from '../../../store/user_actions';
 
 const signupValidationSchema = Yup.object().shape({
+  username: Yup.string()
+    .trim()
+    .min(3, 'name must be at least 3 characters long')
+    .max(30, 'name is too large')
+    .required('this field is required'),
   email: Yup.string()
     .email('add a valid email address')
     .required('this field is required'),
@@ -24,15 +30,18 @@ const signupValidationSchema = Yup.object().shape({
     .required('this field is required'),
 });
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const dispatch = useDispatch();
-
+  const history = useHistory();
   return (
+
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={{ username: '', email: '', password: '' }}
       validationSchema={signupValidationSchema}
-      onSubmit={(values) => {
-        dispatch(singIn(values));
+      onSubmit={async (values) => {
+        console.log(values);
+        await dispatch(signUp(values));
+        history.push('auth/login');
       }}
       validateOnBlur
       validateOnChange
@@ -40,6 +49,10 @@ const LoginForm = () => {
       {({ isSubmitting }) => (
         <Form style={{ width: '380px' }}>
           <Column central strech>
+            <TextField label="Name" name="username" type="text" Icon={BiUser} />
+            <ErrorMessage name="username" component={InputErrorText} />
+            {/* {errors.name && touched.name ? <div>{errors.name}</div> : null} */}
+
             <TextField
               label="Email"
               name="email"
@@ -55,10 +68,6 @@ const LoginForm = () => {
               Icon={RiLockPasswordLine}
             />
             <ErrorMessage name="password" component={InputErrorText} />
-
-            <BlackLinkText>
-              Forgot your password ?
-            </BlackLinkText>
             <FormButton
               type="submit"
               disabled={isSubmitting}
@@ -73,4 +82,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

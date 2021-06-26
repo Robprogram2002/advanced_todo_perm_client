@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Login from './pages/Auth/Login';
+import Auth from './pages/Auth';
 
 function App() {
   const userState = useSelector((state) => state.user);
@@ -12,27 +12,18 @@ function App() {
       <Redirect to="/app" />
     </Switch>
   );
-  console.log(userState);
 
   if (!userState.authenticated) {
     routes = (
       <Switch>
-        <Route path="/auth/login" exact component={Login} />
-        <Route
-          path="/auth/signup"
-          exact
-          render={() => <h1>Hello from sing Up</h1>}
-        />
+        <Route path="/auth/login" exact component={Auth} />
+        <Route path="/auth/signup" exact component={Auth} />
         <Redirect to="/auth/login" />
       </Switch>
     );
   }
 
-  return (
-    <div>
-      {routes}
-    </div>
-  );
+  return <div>{routes}</div>;
 }
 
 export default App;

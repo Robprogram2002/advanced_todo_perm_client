@@ -6,8 +6,6 @@ export const signUp = createAsyncThunk(
   async ({ email, username, password }) => {
     const response = await API.post('/signup', { email, username, password });
 
-    console.log(response);
-
     if (!response.ok) throw new Error('Somehting went worng, please try again');
 
     return {
@@ -19,15 +17,13 @@ export const signUp = createAsyncThunk(
 export const singIn = createAsyncThunk(
   'user/signIn',
   async ({ email, password }) => {
-    const response = await API.get('/signin', { data: { email, password } });
+    const response = await API.post('/signin', { email, password });
 
-    console.log(response);
-
-    if (!response.ok) throw new Error('Somehting went worng, please try again');
+    if (response.status !== 200) throw new Error('Somehting went worng, please try again');
 
     return {
-      user: response.user,
-      token: response.token,
+      user: response.data.user,
+      token: response.data.token,
     };
   },
 );
