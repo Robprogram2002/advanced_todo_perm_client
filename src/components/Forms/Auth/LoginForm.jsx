@@ -3,7 +3,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BlackLinkText } from '../../StyledComponents/styled';
 import { FormButton } from '../../StyledComponents/FormStyles';
 import { Column } from '../../StyledComponents/ContainerStyles';
@@ -26,13 +26,15 @@ const signupValidationSchema = Yup.object().shape({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.uiState);
 
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
       validationSchema={signupValidationSchema}
-      onSubmit={(values) => {
+      onSubmit={(values, actions) => {
         dispatch(singIn(values));
+        actions.resetForm();
       }}
       validateOnBlur
       validateOnChange
@@ -64,7 +66,7 @@ const LoginForm = () => {
               disabled={isSubmitting}
               background={globalColors.loginColor}
             >
-              Submit
+              {loading ? 'Loading ...' : 'Submit'}
             </FormButton>
           </Column>
         </Form>

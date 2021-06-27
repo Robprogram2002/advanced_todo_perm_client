@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { BiUser } from 'react-icons/bi';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { FormButton } from '../../StyledComponents/FormStyles';
 import { Column } from '../../StyledComponents/ContainerStyles';
@@ -33,15 +33,20 @@ const signupValidationSchema = Yup.object().shape({
 const SignUpForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { success, loading } = useSelector((state) => state.uiState);
+
+  useEffect(() => {
+    if (success && history.location === '/auth/signup') history.push('auth/login');
+  }, [success]);
+
   return (
 
     <Formik
       initialValues={{ username: '', email: '', password: '' }}
       validationSchema={signupValidationSchema}
-      onSubmit={async (values) => {
-        console.log(values);
-        await dispatch(signUp(values));
-        history.push('auth/login');
+      onSubmit={(values, actions) => {
+        actions.resetForm();
+        dispatch(signUp(values));
       }}
       validateOnBlur
       validateOnChange
@@ -73,7 +78,7 @@ const SignUpForm = () => {
               disabled={isSubmitting}
               background={globalColors.loginColor}
             >
-              Submit
+              {loading ? 'Loading ...' : 'Submit'}
             </FormButton>
           </Column>
         </Form>
