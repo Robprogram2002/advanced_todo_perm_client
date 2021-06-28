@@ -59,13 +59,14 @@ export const FieldLabel = styled.div`
   height: 100%;
   width: auto;
   padding: 0;
-  color: gray;
+  color: ${(props) => (props.color ? props.color : 'gray')} ;
   font-weight: bold;
   margin-left: 8px;
   span {
     margin: 0px 5px;
     font-size: 0.9rem;
   }
+
 `;
 
 export const FieldStyle = styled.div`
@@ -89,6 +90,25 @@ export const FieldStyle = styled.div`
     padding: 0 5px;
     font-weight: bold;
   }
+
+  ${(props) => props.search && css`
+    height: 5vh;
+    width : 60%;
+    background-color: #ff6b6b;
+    margin: 0.9rem;
+    border-radius: 8px;
+
+    input.text_input {
+    font-size: .9rem;
+    color: white;
+    font-weight: normal;
+    }
+    
+    input::placeholder {
+      color:white;
+    }
+
+  `}
 `;
 
 // or color: brown

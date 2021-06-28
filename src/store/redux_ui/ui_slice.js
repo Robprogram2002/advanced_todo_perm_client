@@ -2,17 +2,36 @@ import { createSlice } from '@reduxjs/toolkit';
 import { signUp, singIn, meRequest } from '../user_actions';
 
 const initialState = {
-  loading: true,
+  homeLoading: true,
+  loading: false,
   error: false,
   success: false,
   errorMessage: '',
   successMessage: '',
+  showModal: false,
+  showSideMenu: true,
 };
 
 const uiSlice = createSlice({
   name: 'uiState',
   initialState,
-  reducers: {},
+  reducers: {
+    stopHomeLoading(state) {
+      state.homeLoading = false;
+    },
+    openModal(state) {
+      state.showModal = true;
+    },
+    closeModal(state) {
+      state.showModal = false;
+    },
+    openSideMenu(state) {
+      state.showSideMenu = true;
+    },
+    closeSideMenu(state) {
+      state.showSideMenu = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(signUp.pending, (state) => {
       state.loading = true;
@@ -45,12 +64,14 @@ const uiSlice = createSlice({
       state.error = true;
     });
     builder.addCase(meRequest.fulfilled, (state) => {
-      state.loading = false;
+      state.homeLoading = false;
     });
     builder.addCase(meRequest.rejected, (state) => {
-      state.loading = false;
+      state.homeLoading = false;
     });
   },
 });
+
+export const uiActions = uiSlice.actions;
 
 export default uiSlice;

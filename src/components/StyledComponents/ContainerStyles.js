@@ -43,6 +43,10 @@ export const SplitContainer = styled.div`
   display: grid;
   grid-template-columns: ${(props) => props.columns[0]}% ${(props) => props.columns[1]}%;
   height: 100%;
+
+  ${(props) => props.strech && css`
+    width:  ${() => (props.width ? props.width : 100)}%
+  `}
 `;
 
 export const Column = styled.div`
@@ -52,6 +56,9 @@ export const Column = styled.div`
     && css`
       align-items: center;
     `}
+  ${(props) => props.right && css`
+    align-items: flex-end;
+  `}  
 
   ${(props) => props.strech
     && css`

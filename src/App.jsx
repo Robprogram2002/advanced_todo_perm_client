@@ -1,57 +1,25 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
 import Auth from './pages/Auth';
 import { meRequest } from './store/user_actions';
+import { uiActions } from './store/redux_ui/ui_slice';
+import Home from './pages/Home';
 
 function App() {
-  const {
-    success, error, successMessage, errorMessage, loading,
-  } = useSelector((state) => state.uiState);
+  const { homeLoading } = useSelector((state) => state.uiState);
   const { authenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  const notifySucess = () => {
-    toast.success(successMessage, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
-  const notifyError = () => {
-    toast.error(errorMessage, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
-  useEffect(() => {
-    if (success) {
-      notifySucess();
-    }
-  }, [success]);
-
-  useEffect(() => {
-    if (error) notifyError();
-  }, [error]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     let expirationTime = localStorage.getItem('tokenExpiration');
 
-    if (!token || !expirationTime) return;
+    if (!token || !expirationTime) {
+      dispatch(uiActions.stopHomeLoading());
+      return;
+    }
 
     expirationTime = new Date(expirationTime).getTime();
 
@@ -66,12 +34,13 @@ function App() {
       // token has expired
       localStorage.removeItem('token');
       localStorage.removeItem('tokenExpiration');
+      dispatch(uiActions.stopHomeLoading());
     }
   }, []);
 
   let routes = (
     <Switch>
-      <Route path="/app" render={() => <h1>Home of the app</h1>} exact />
+      <Route path="/app" component={Home} exact />
       <Redirect to="/app" />
     </Switch>
   );
@@ -87,20 +56,9 @@ function App() {
   }
 
   return (
-    <div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      {loading ? (<h1> Loading ...</h1>) : routes}
-    </div>
+    <>
+      {homeLoading ? (<h1> Loading ...</h1>) : routes}
+    </>
   );
 }
 

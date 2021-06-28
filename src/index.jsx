@@ -6,12 +6,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store/store';
+import NotificationWrapper from './components/NotificationWrapper';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <App />
+        <NotificationWrapper>
+          <App />
+        </NotificationWrapper>
       </Router>
     </Provider>
   </React.StrictMode>,
