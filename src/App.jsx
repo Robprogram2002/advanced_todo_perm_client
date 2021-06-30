@@ -8,7 +8,10 @@ import { uiActions } from './store/redux_ui/ui_slice';
 import Home from './pages/Home';
 
 function App() {
-  const { homeLoading } = useSelector((state) => state.uiState);
+  const { homeLoading } = useSelector((state) => {
+    console.log(state);
+    return state.uiState;
+  });
   const { authenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -40,7 +43,7 @@ function App() {
 
   let routes = (
     <Switch>
-      <Route path="/app" component={Home} exact />
+      <Route path="/app" component={Home} />
       <Redirect to="/app" />
     </Switch>
   );

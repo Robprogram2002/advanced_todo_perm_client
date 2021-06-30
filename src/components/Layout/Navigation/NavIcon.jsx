@@ -1,42 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import { NavIconContainer } from '../../StyledComponents/styled';
 
-const NavIconContainer = styled.div`
-  width: 2.2em;
-  height: 5vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 6px 0px;
-  color: white;
-  font-weight: normal;
-  &:hover {
-    background-color : #ff6b6b
-  }
-
-  ${(props) => props.aside && css`
-    color: lightgray;
-    &:hover {
-      background-color: #ece7e6;
-      color: black;
-    }
-  `}
-  
-`;
-
-const NavIcon = ({ Icon, aside }) => (
-  <NavIconContainer aside={aside}>
-    <Icon style={{ height: '100%', width: '100%' }} />
+const NavIcon = ({
+  Icon, aside, text, withText,
+}) => (
+  <NavIconContainer aside={aside} withText={withText}>
+    <Icon style={{ height: '25px', width: '25px' }} />
+    {text && (
+    <span>
+      {' '}
+      {text}
+      {' '}
+    </span>
+    )}
   </NavIconContainer>
 );
 
 NavIcon.propTypes = {
   Icon: PropTypes.node.isRequired,
   aside: PropTypes.bool.isRequired,
+  text: PropTypes.string,
+  withText: PropTypes.string,
+};
+
+NavIcon.defaultProps = {
+  text: '',
+  withText: '',
 };
 
 export default NavIcon;

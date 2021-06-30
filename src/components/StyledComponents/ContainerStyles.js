@@ -27,7 +27,7 @@ export const CentralDiv = styled.div`
 
 export const CardContainer = styled.div`
   border-radius: ${(props) => props.borderRadius}px;
-  width: ${(props) => props.width}%;
+  width: ${(props) => (props.width ? props.width : 100)}%;
   height: ${(props) => props.height}%;
   padding: ${(props) => props.padding}rem;
   overflow: hidden;
@@ -75,5 +75,12 @@ export const Row = styled.div`
     && css`
       align-items: center;
     `}
-  margin: 1rem
+
+  ${(props) => props.margin && css`
+    margin: ${props.margin}rem;
+  `}
+
+  ${(props) => props.between && css`
+    justify-content: space-between
+  `}
 `;

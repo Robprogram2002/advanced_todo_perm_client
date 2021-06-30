@@ -9,7 +9,7 @@ const NotificationWrapper = ({ children }) => {
   } = useSelector((state) => state.uiState);
   const notifySucess = () => {
     toast.success(successMessage, {
-      position: 'top-right',
+      position: 'top-center',
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -21,7 +21,7 @@ const NotificationWrapper = ({ children }) => {
 
   const notifyError = () => {
     toast.error(errorMessage, {
-      position: 'top-right',
+      position: 'top-center',
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -44,7 +44,7 @@ const NotificationWrapper = ({ children }) => {
   return (
     <>
       <ToastContainer
-        position="top-right"
+        position="top-center"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}

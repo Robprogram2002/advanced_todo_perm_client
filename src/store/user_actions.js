@@ -30,7 +30,9 @@ export const singIn = createAsyncThunk(
         throw new Error('Somehting went worng, please try again');
       }
 
-      const { token, expirationTime, user } = response.data;
+      const {
+        token, expirationTime, user, proyects,
+      } = response.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('tokenExpiration', expirationTime);
@@ -38,9 +40,14 @@ export const singIn = createAsyncThunk(
       return {
         user,
         token,
+        proyects,
       };
     } catch (error) {
-      throw new Error(error.response.data.message);
+      if (error.response) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Something went wrong , please try again');
+      }
     }
   },
 );
@@ -54,16 +61,17 @@ export const meRequest = createAsyncThunk(
           Authorization: `Beaer ${token}`,
         },
       });
-      console.log(response);
 
       if (response.status !== 200) throw new Error('something went wrong');
+
+      console.log(response.data);
 
       return {
         user: response.data.user,
         token: localStorage.getItem('token'),
+        proyects: response.data.proyects,
       };
     } catch (error) {
-      console.log(error.response);
       throw new Error(error.message);
     }
   },

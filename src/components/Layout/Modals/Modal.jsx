@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components/';
-import { uiActions } from '../../../store/redux_ui/ui_slice';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -45,18 +43,15 @@ const ModalOverlay = ({ children, width }) => <ModalStyle width={width}>{childre
 const portalElement = document.getElementById('overlays');
 
 // eslint-disable-next-line react/prop-types
-const Modal = ({ children, width }) => {
-  const dispatch = useDispatch();
-  return (
-    <>
-      {ReactDOM.createPortal(
-        <Backdrop onClick={() => dispatch(uiActions.closeModal())}>
-          <ModalOverlay width={width}>{children}</ModalOverlay>
-        </Backdrop>,
-        portalElement,
-      )}
-    </>
-  );
-};
+const Modal = ({ children, width }) => (
+  <>
+    {ReactDOM.createPortal(
+      <Backdrop>
+        <ModalOverlay width={width}>{children}</ModalOverlay>
+      </Backdrop>,
+      portalElement,
+    )}
+  </>
+);
 
 export default Modal;

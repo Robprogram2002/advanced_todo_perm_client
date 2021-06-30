@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FiHelpCircle } from 'react-icons/fi';
 import Modal from './Modal';
+import CreateProyectForm from '../../Forms/Proyects/CreateProyectForm';
 
 const Head = styled.div`
     display: flex;
@@ -21,6 +22,9 @@ const CreateProyectModal = () => (
       <FiHelpCircle />
     </Head>
     <hr />
+    <CreateProyectForm />
+    <hr />
+
   </Modal>
 );
 

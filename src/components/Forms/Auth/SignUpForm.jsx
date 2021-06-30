@@ -33,11 +33,14 @@ const signupValidationSchema = Yup.object().shape({
 const SignUpForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { success, loading } = useSelector((state) => state.uiState);
+  const { redirectTo } = useSelector((state) => state.metaData);
+  const { loading } = useSelector((state) => state.uiState);
 
   useEffect(() => {
-    if (success && history.location === '/auth/signup') history.push('auth/login');
-  }, [success]);
+    if (redirectTo !== null) {
+      history.push(redirectTo);
+    }
+  }, [redirectTo]);
 
   return (
 
