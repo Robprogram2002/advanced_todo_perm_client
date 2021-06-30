@@ -13,7 +13,7 @@ import {
 } from '../../StyledComponents/ContainerStyles';
 import { IconCirc, IconSpan, TaskInputContainer } from '../../StyledComponents/styled';
 import NavIcon from '../../Layout/Navigation/NavIcon';
-import { createProjectTask } from '../../../store/tasks/tasks_actions';
+import { createProjectTask, createSectionTask } from '../../../store/tasks/tasks_actions';
 
 const Container = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ const Container = styled.div`
 `;
 
 // eslint-disable-next-line react/prop-types
-const ProyectTask = ({ projectId }) => {
+const ProyectTask = ({ projectId, section }) => {
   const [showInput, setShowInput] = useState(false);
   const [taskName, setTaskName] = useState('');
   const dispatch = useDispatch();
@@ -57,12 +57,26 @@ const ProyectTask = ({ projectId }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      createProjectTask({
-        name: taskName,
-        entityId: projectId,
-      }),
-    );
+
+    if (section === null || section === undefined) {
+      dispatch(
+        createProjectTask({
+          name: taskName,
+          entityId: projectId,
+        }),
+      );
+    } else {
+      dispatch(
+        createSectionTask({
+          name: taskName,
+          // eslint-disable-next-line react/prop-types
+          entityId: section.uuid,
+        }),
+      );
+    }
+
+    setTaskName('');
+    setShowInput(false);
   };
 
   return (

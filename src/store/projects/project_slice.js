@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createProject, getProject, createSection } from './project_actions';
 import { singIn, meRequest } from '../user_actions';
-import { createProjectTask } from '../tasks/tasks_actions';
+import { createProjectTask, createSectionTask } from '../tasks/tasks_actions';
 
 const initialState = {
   projects: [],
@@ -35,6 +35,15 @@ const projectSlice = createSlice({
     });
     builder.addCase(createSection.fulfilled, (state, action) => {
       state.project.Sections.push(action.payload.section);
+    });
+    builder.addCase(createSectionTask.fulfilled, (state, action) => {
+      const { Sections } = state.project;
+      const { sectionId, task } = action.payload;
+      const index = Sections.findIndex(
+        (section) => section.uuid === sectionId,
+      );
+      const targetSection = Sections[index];
+      targetSection.Tasks.push(task);
     });
   },
 });

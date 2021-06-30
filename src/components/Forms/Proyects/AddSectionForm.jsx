@@ -8,7 +8,7 @@ import { createSection } from '../../../store/projects/project_actions';
 
 const TriggerDiv = styled.div`
   .hoverme {
-    height: 12px;
+    height: 21px;
     width: 100%;
   }
 
@@ -109,21 +109,24 @@ const AddSectionForm = ({ projectId }) => {
           <FormButton
             type="submit"
             background="crimson"
-            width={45}
-            height={35}
+            width={40}
+            height={30}
             radius={8}
             disable={() => sectionName === ''}
             onClick={submitHandler}
           >
-            Add Section
+            Add
           </FormButton>
           <FormButton
             type="submit"
             background="gray"
             width={40}
-            height={35}
+            height={30}
             radius={8}
-            onClick={() => setShowInput(false)}
+            onClick={() => {
+              setSectionName('');
+              setShowInput(false);
+            }}
           >
             Cancel
           </FormButton>

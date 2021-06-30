@@ -19,7 +19,7 @@ const Feed = () => {
   }, [redirectTo]);
 
   return (
-    <section>
+    <section style={{ maxHeight: '90vh', overflowY: 'scroll', paddingBottom: '8rem' }}>
       {uiState.showModal && <CreateProyectModal />}
       <Switch>
         <Route path={`${path}/project/:projectId`} component={Project} exact />

@@ -34,4 +34,34 @@ export const createProjectTask = createAsyncThunk(
   },
 );
 
+export const createSectionTask = createAsyncThunk(
+  'taskSection/create',
+  async ({ name, entityId }) => {
+    try {
+      const response = await API.post('/tasks/create', {
+        name,
+        entityId,
+        entityType: 'Section',
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (response.status !== 200) {
+        throw new Error('Somehting went worng, please try again');
+      }
+      return {
+        task: response.data.result,
+        sectionId: entityId,
+      };
+    } catch (error) {
+      if (error.response) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Something went wrong , please try again');
+      }
+    }
+  },
+);
+
 export const deleteTask = createAsyncThunk();

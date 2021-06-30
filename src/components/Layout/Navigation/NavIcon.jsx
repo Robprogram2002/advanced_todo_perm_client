@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { NavIconContainer } from '../../StyledComponents/styled';
 
 const NavIcon = ({
-  Icon, aside, text, withText,
+  Icon, aside, text, withText, size, clickHandler,
 }) => (
-  <NavIconContainer aside={aside} withText={withText}>
-    <Icon style={{ height: '25px', width: '25px' }} />
+  <NavIconContainer aside={aside} withText={withText} onClick={clickHandler}>
+    <Icon style={{ height: `${size}px`, width: `${size}px` }} />
     {text && (
     <span>
       {' '}
@@ -22,11 +22,15 @@ NavIcon.propTypes = {
   aside: PropTypes.bool.isRequired,
   text: PropTypes.string,
   withText: PropTypes.string,
+  size: PropTypes.number,
+  clickHandler: PropTypes.func,
 };
 
 NavIcon.defaultProps = {
   text: '',
   withText: '',
+  size: 25,
+  clickHandler: () => {},
 };
 
 export default NavIcon;

@@ -28,7 +28,7 @@ export const BlackLinkText = styled.p`
 `;
 
 export const NavIconContainer = styled.div`
-  height: 5vh;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
