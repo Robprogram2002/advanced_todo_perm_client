@@ -7,6 +7,7 @@ const NotificationWrapper = ({ children }) => {
   const {
     success, error, successMessage, errorMessage,
   } = useSelector((state) => state.uiState);
+
   const notifySucess = () => {
     toast.success(successMessage, {
       position: 'top-center',
@@ -35,11 +36,11 @@ const NotificationWrapper = ({ children }) => {
     if (success) {
       notifySucess();
     }
-  }, [success]);
+  }, [success, successMessage]);
 
   useEffect(() => {
     if (error) notifyError();
-  }, [error]);
+  }, [error, errorMessage]);
 
   return (
     <>

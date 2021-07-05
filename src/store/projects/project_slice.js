@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createProject, getProject, createSection } from './project_actions';
+import {
+  createProject, getProject, createSection,
+} from './project_actions';
 import { singIn, meRequest } from '../user_actions';
 import { createProjectTask, createSectionTask } from '../tasks/tasks_actions';
 
@@ -11,7 +13,26 @@ const initialState = {
 const projectSlice = createSlice({
   name: 'projectSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    updateTasksOrder(state, action) {
+      const newTasks = action.payload;
+      state.project.Tasks = newTasks;
+    },
+    updateSectionTasksOrder(state, action) {
+      const { newTasks, sectionId } = action.payload;
+      const { Sections } = state.project;
+      const index = Sections.findIndex(
+        (section) => section.uuid === sectionId,
+      );
+      const targetSection = Sections[index];
+      targetSection.Tasks = newTasks;
+    },
+    updateSectionsOrder(state, action) {
+      console.log(action);
+      const { project } = state;
+      project.Sections = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createProject.fulfilled, (state, action) => {
       const { project } = action.payload;

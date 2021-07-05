@@ -9,15 +9,19 @@ export const createProjectTask = createAsyncThunk(
     console.log('hereeee');
 
     try {
-      const response = await API.post('/tasks/create', {
-        name,
-        entityId,
-        entityType: 'Proyect',
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await API.post(
+        '/tasks/create',
+        {
+          name,
+          entityId,
+          entityType: 'Proyect',
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
       if (response.status !== 200) {
         throw new Error('Somehting went worng, please try again');
       }
@@ -38,15 +42,19 @@ export const createSectionTask = createAsyncThunk(
   'taskSection/create',
   async ({ name, entityId }) => {
     try {
-      const response = await API.post('/tasks/create', {
-        name,
-        entityId,
-        entityType: 'Section',
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await API.post(
+        '/tasks/create',
+        {
+          name,
+          entityId,
+          entityType: 'Section',
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
       if (response.status !== 200) {
         throw new Error('Somehting went worng, please try again');
       }
@@ -64,4 +72,41 @@ export const createSectionTask = createAsyncThunk(
   },
 );
 
-export const deleteTask = createAsyncThunk();
+export const changeTasksOrder = createAsyncThunk(
+  'tasks/change-order',
+  async ({
+    entityId,
+    entityType,
+    taskId,
+    actualPosition,
+    newPosition,
+  }) => {
+    try {
+      const response = await API.patch('/tasks/re-order', {
+        entityId,
+        entityType,
+        taskId,
+        actualPosition,
+        newPosition,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Somehting went worng, please try again');
+      }
+
+      return {
+        message: response.data.message,
+      };
+    } catch (error) {
+      if (error.response) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Something went wrong , please try again');
+      }
+    }
+  },
+);

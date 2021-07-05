@@ -1,23 +1,10 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
 import { FiEdit } from 'react-icons/fi';
 import { GrSchedules } from 'react-icons/gr';
 import { BsThreeDots } from 'react-icons/bs';
 import { GoCommentDiscussion } from 'react-icons/go';
-import { Row } from '../../StyledComponents/ContainerStyles';
 import NavIcon from '../../Layout/Navigation/NavIcon';
-
-export const OptionsRow = styled(Row)`
-    position: absolute;
-    width: 10em;
-    right: 4rem;
-    justify-content: space-between;
-    background-color: rgb(254,254,254, 0.94);
-
-    ${(props) => props.section && css`
-      right: 0.5rem;
-    `}
-`;
+import { OptionsRow } from '../../StyledComponents/TaskStyles';
 
 const TaskOptions = () => (
   <OptionsRow central>

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { signUp, singIn, meRequest } from '../user_actions';
+import { changeTasksOrder } from '../tasks/tasks_actions';
+import { changeSectionsOrder } from '../projects/project_actions';
 
 const initialState = {
   homeLoading: true,
@@ -68,6 +70,26 @@ const uiSlice = createSlice({
     });
     builder.addCase(meRequest.rejected, (state) => {
       state.homeLoading = false;
+    });
+    builder.addCase(changeTasksOrder.pending, (state) => {
+      state.error = false;
+      state.errorMessage = '';
+      state.success = false;
+      state.successMessage = '';
+    });
+    builder.addCase(changeTasksOrder.fulfilled, (state, action) => {
+      state.success = true;
+      state.successMessage = action.payload.message;
+    });
+    builder.addCase(changeSectionsOrder.fulfilled, (state, action) => {
+      state.success = true;
+      state.successMessage = action.payload.message;
+    });
+    builder.addCase(changeSectionsOrder.pending, (state) => {
+      state.error = false;
+      state.errorMessage = '';
+      state.success = false;
+      state.successMessage = '';
     });
   },
 });

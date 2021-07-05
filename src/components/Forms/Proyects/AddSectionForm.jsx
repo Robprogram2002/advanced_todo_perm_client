@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Row, Column } from '../../StyledComponents/ContainerStyles';
-import { TaskInputContainer } from '../../StyledComponents/styled';
+import { TaskInputContainer } from '../../StyledComponents/TaskStyles';
 import { FormButton } from '../../StyledComponents/FormStyles';
 import { createSection } from '../../../store/projects/project_actions';
 

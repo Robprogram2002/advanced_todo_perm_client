@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { CardContainer } from './ContainerStyles';
 
 export const SocialIcon = styled.div`
   display: flex;
@@ -81,10 +80,4 @@ export const IconSpan = styled(NavIconContainer)`
     background-color: #ebebeb;
     color: black;
   }
-`;
-
-export const TaskInputContainer = styled(CardContainer)`
-  border: 1px solid lightgray;
-  border-radius: 6px;
-  padding: 0.8rem;
 `;

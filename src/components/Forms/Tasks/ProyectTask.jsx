@@ -11,9 +11,10 @@ import {
   Row,
   Column,
 } from '../../StyledComponents/ContainerStyles';
-import { IconCirc, IconSpan, TaskInputContainer } from '../../StyledComponents/styled';
+import { IconCirc, IconSpan } from '../../StyledComponents/styled';
 import NavIcon from '../../Layout/Navigation/NavIcon';
 import { createProjectTask, createSectionTask } from '../../../store/tasks/tasks_actions';
+import { TaskInputContainer } from '../../StyledComponents/TaskStyles';
 
 const Container = styled.div`
   display: flex;
@@ -44,7 +45,7 @@ const Container = styled.div`
 `;
 
 // eslint-disable-next-line react/prop-types
-const ProyectTask = ({ projectId, section }) => {
+const ProyectTask = ({ projectId, sectionId }) => {
   const [showInput, setShowInput] = useState(false);
   const [taskName, setTaskName] = useState('');
   const dispatch = useDispatch();
@@ -58,7 +59,9 @@ const ProyectTask = ({ projectId, section }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (section === null || section === undefined) {
+    console.log(sectionId);
+
+    if (sectionId === null || sectionId === undefined) {
       dispatch(
         createProjectTask({
           name: taskName,
@@ -70,7 +73,7 @@ const ProyectTask = ({ projectId, section }) => {
         createSectionTask({
           name: taskName,
           // eslint-disable-next-line react/prop-types
-          entityId: section.uuid,
+          entityId: sectionId,
         }),
       );
     }
@@ -83,6 +86,7 @@ const ProyectTask = ({ projectId, section }) => {
     <>
       {!showInput && (
         <Container onClick={() => setShowInput(true)} margin>
+          <div style={{ height: '1em', width: '1.55em' }} />
           <IconCirc size={24} color="crimson" className="circ_div">
             <AiOutlinePlus />
           </IconCirc>

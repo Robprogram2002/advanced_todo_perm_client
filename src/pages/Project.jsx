@@ -10,6 +10,7 @@ import NavIcon from '../components/Layout/Navigation/NavIcon';
 import { getProject } from '../store/projects/project_actions';
 import AddSectionRow from '../components/Forms/Proyects/AddSectionForm';
 import TasksContainer from '../components/Feed/TasksContainer';
+import SectionListContainer from '../components/Feed/SectionListContainer';
 
 const ProjectTitle = styled.h2`
   font-size: 1.4rem;
@@ -43,28 +44,34 @@ const Project = () => {
               </ProjectTitle>
             </div>
             <Row central style={{ width: '35%' }}>
-              <NavIcon Icon={GoCommentDiscussion} text={1} aside withText />
-              <NavIcon Icon={RiUserSharedLine} text="Share" aside withText />
-              <NavIcon Icon={RiArrowUpDownFill} text="Sort" aside withText />
-              <NavIcon Icon={BsThreeDots} aside withText />
+              <NavIcon
+                Icon={GoCommentDiscussion}
+                text={1}
+                aside
+                withText
+                size={20}
+              />
+              <NavIcon
+                Icon={RiUserSharedLine}
+                text="Share"
+                aside
+                withText
+                size={20}
+              />
+              <NavIcon
+                Icon={RiArrowUpDownFill}
+                text="Sort"
+                aside
+                withText
+                size={20}
+              />
+              <NavIcon Icon={BsThreeDots} aside withText size={20} />
             </Row>
           </Row>
           <div style={{ height: '14px' }} />
           <TasksContainer projectId={projectId} Tasks={project.Tasks} />
           <AddSectionRow projectId={projectId} />
-          {project.Sections.length > 0 && project.Sections.map((section) => (
-            <>
-
-              <TasksContainer
-                projectId={projectId}
-                Tasks={section.Tasks}
-                section={section}
-                key={section.uuid}
-              />
-              <AddSectionRow projectId={projectId} />
-
-            </>
-          ))}
+          <SectionListContainer Sections={project.Sections} />
         </>
       )}
     </div>

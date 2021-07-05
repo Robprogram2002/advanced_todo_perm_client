@@ -12,6 +12,7 @@ const IconWrapper = styled.div`
   cursor: pointer;
   padding: 10px;
   font-weight: normal;
+  margin-left: 5px;
 
   &:hover {
       background-color: #cacaca;
