@@ -10,59 +10,80 @@ import Task from './Task/Task';
 import { projectActions } from '../../store/projects/project_slice';
 import ProyectTask from '../Forms/Tasks/ProyectTask';
 
+export const dndTaskHandler = ({
+  result, dispatch, Tasks, sectionId,
+}) => {
+  const {
+    destination, source, draggableId, type,
+  } = result;
+  if (!destination) {
+    return;
+  }
+
+  if (destination.index === source.index) {
+    return;
+  }
+  const index = Tasks.findIndex((task) => task.uuid === draggableId);
+  const dragTask = Tasks[index];
+
+  const newTasks = Array.from(Tasks);
+  newTasks.splice(source.index, 1);
+  newTasks.splice(destination.index, 0, dragTask);
+
+  let entityType;
+
+  if (type === 'section-tasks') {
+    // dispatch local reducer to update the tasks array for this Section
+    dispatch(
+      projectActions.updateSectionTasksOrder({
+        newTasks,
+        sectionId: dragTask.entityId,
+      }),
+    );
+    entityType = 'Section';
+  } else if (type === 'project-tasks') {
+    // dispatch local reducer to update the tasks array for this project
+    dispatch(projectActions.updateTasksOrder(newTasks));
+
+    entityType = 'Proyect';
+  } else if (type === 'sub-task') {
+    dispatch(
+      projectActions.UpdateSubTasksOrder({
+        newSubTasks: newTasks,
+        taskId: dragTask.entityId, // the id of the parent task
+        sectionId: sectionId || null,
+      }),
+    );
+    entityType = 'Task';
+  }
+
+  // dispatch async thunk action to update the tasks order
+
+  dispatch(
+    changeTasksOrder({
+      taskId: dragTask.uuid,
+      actualPosition: source.index,
+      newPosition: destination.index,
+      entityId: dragTask.entityId,
+      entityType,
+    }),
+  );
+};
+
 const TasksContainer = ({ projectId, Tasks, sectionId }) => {
   const dispatch = useDispatch();
 
   const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-    if (!destination) {
-      return;
-    }
-
-    if (destination.index === source.index) {
-      return;
-    }
-    const index = Tasks.findIndex((task) => task.uuid === draggableId);
-    const dragTask = Tasks[index];
-
-    const newTasks = Array.from(Tasks);
-    newTasks.splice(source.index, 1);
-    newTasks.splice(destination.index, 0, dragTask);
-
-    if (sectionId) {
-      // dispatch local reducer to update the tasks array for this Section
-      dispatch(projectActions.updateSectionTasksOrder({ newTasks, sectionId }));
-      // dispatch async thunk action to update the tasks order for this Section
-      dispatch(
-        changeTasksOrder({
-          entityId: sectionId,
-          taskId: dragTask.uuid,
-          actualPosition: source.index,
-          newPosition: destination.index,
-          entityType: 'Section',
-        }),
-      );
-    } else {
-      // dispatch local reducer to update the tasks array for this project
-      dispatch(projectActions.updateTasksOrder(newTasks));
-
-      // dispatch async thunk action to update the tasks order for this project
-      dispatch(
-        changeTasksOrder({
-          entityId: projectId,
-          taskId: dragTask.uuid,
-          actualPosition: source.index,
-          newPosition: destination.index,
-          entityType: 'Proyect',
-        }),
-      );
-    }
+    dndTaskHandler({ result, dispatch, Tasks });
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <CardContainer borderRadius={6} background="#fdfdfd">
-        <Droppable droppableId="tasks_droppable" type="task">
+        <Droppable
+          droppableId="tasks_droppable"
+          type={sectionId ? 'section-tasks' : 'project-tasks'}
+        >
           {(provided, { isDraggingOver }) => (
             <TaskListWrapper
               ref={provided.innerRef}
@@ -77,6 +98,7 @@ const TasksContainer = ({ projectId, Tasks, sectionId }) => {
                     index={index}
                     key={task.uuid}
                     isDragging={isDraggingOver}
+                    sectionId={sectionId}
                   />
                 ))}
               {provided.placeholder}

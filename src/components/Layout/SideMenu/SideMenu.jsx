@@ -12,13 +12,29 @@ const SideMenu = () => {
   const dispatch = useDispatch();
 
   return (
-    <Column right style={{ padding: '2.2rem 0rem', backgroundColor: 'whitesmoke', height: '100vh' }}>
+    <Column
+      right
+      style={{
+        padding: '2.2rem 0rem',
+        backgroundColor: 'whitesmoke',
+        height: '100vh',
+      }}
+    >
       <SideMenuRow Icon={BsFillInboxFill} text="Inbox" color="blue" hover />
       <SideMenuRow Icon={BsCalendar} text="Today" color="green" hover />
-      <SideMenuRow Icon={SiGooglecalendar} text="Upcoming" color="purple" hover />
+      <SideMenuRow
+        Icon={SiGooglecalendar}
+        text="Upcoming"
+        color="purple"
+        hover
+      />
       <div style={{ height: '1rem' }} />
-      <SideMenuRow Icon={IoIosArrowForward} text="Favorites" addFunction={() => dispatch(uiActions.openModal())} />
-      <SideMenuRow Icon={IoIosArrowForward} text="Projects" />
+      <SideMenuRow Icon={IoIosArrowForward} text="Favorites" />
+      <SideMenuRow
+        Icon={IoIosArrowForward}
+        text="Projects"
+        addFunction={() => dispatch(uiActions.openModal({ modalType: 'createProject' }))}
+      />
       <SideMenuRow Icon={IoIosArrowForward} text="Labels" />
       <SideMenuRow Icon={IoIosArrowForward} text="Filters" />
     </Column>

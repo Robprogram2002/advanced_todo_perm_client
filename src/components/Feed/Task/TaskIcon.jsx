@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { IoIosArrowForward } from 'react-icons/io';
 
 const IconWrapper = styled.div`
   display: flex;
@@ -15,32 +16,45 @@ const IconWrapper = styled.div`
   margin-left: 5px;
 
   &:hover {
-      background-color: #cacaca;
-      padding: 2px;
-      & svg {
-        display:block;
-      }
+    background-color: #cacaca;
+    padding: 2px;
+    & svg {
+      display: block;
+    }
   }
 
   & svg {
-      display : none;
+    display: none;
   }
-
 `;
 
-const TaskIcon = ({ Icon, size }) => (
-  <IconWrapper>
-    <Icon height={size} width={size} />
-  </IconWrapper>
+const TaskIcon = ({
+  Icon, size, sub, toggleSub, modal,
+}) => (
+  <>
+    { sub ? (
+      <IoIosArrowForward onClick={() => toggleSub((prevState) => !prevState)} />
+    ) : !modal && (
+      <div style={{ width: '16px' }} />
+    ) }
+    <IconWrapper>
+      <Icon height={size} width={size} />
+    </IconWrapper>
+  </>
 );
 
 TaskIcon.propTypes = {
   Icon: PropTypes.node.isRequired,
   size: PropTypes.number,
+  sub: PropTypes.bool.isRequired,
+  toggleSub: PropTypes.func,
+  modal: PropTypes.bool,
 };
 
 TaskIcon.defaultProps = {
   size: 20,
+  toggleSub: () => {},
+  modal: false,
 };
 
 export default TaskIcon;

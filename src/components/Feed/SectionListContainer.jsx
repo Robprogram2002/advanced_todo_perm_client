@@ -56,7 +56,7 @@ const SectionListContainer = ({ Sections }) => {
                 <div key={section.uuid}>
                   <SectionContainer section={section} index={index} />
                   {!isDraggingOver ? (
-                    <AddSectionRow projectId={section.proyectId} />
+                    <AddSectionRow projectId={section.proyectId} position={index + 1} />
                   ) : (
                     <div style={{ height: '21px' }} />
                   )}

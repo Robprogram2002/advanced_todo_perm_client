@@ -24,6 +24,7 @@ const ModalStyle = styled.div`
   animation: slide-down 300ms ease-out forwards;
   width: ${(props) => (props.width ? props.width : 50)}%;
   margin-top: 1rem;
+  padding: 1.6rem;
 
   @keyframes slide-down {
     from {

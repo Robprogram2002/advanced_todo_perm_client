@@ -7,11 +7,12 @@ export const TaskInputContainer = styled(CardContainer)`
   padding: 0.8rem;
 `;
 
-export const Paragraph = styled.p`
+export const Paragraph = styled.div`
   font-size: 0.9rem;
   text-align: justify;
   padding-left: 1em;
   padding-right: 2em;
+  width: 100%;
 
   ${(props) => props.section
     && css`
@@ -19,11 +20,15 @@ export const Paragraph = styled.p`
       font-weight: bold;
       padding-left: 0.5em;
     `}
+
+  ${(props) => props.big && css`
+    font-size: 1.02rem;
+  `}
 `;
 
 export const MoveIconWrapper = styled.div`
   height: 20px;
-  width: 20px;
+  width: 23px;
   background-color: transparent;
 
   .drag_icon {
@@ -33,14 +38,14 @@ export const MoveIconWrapper = styled.div`
 `;
 
 export const OptionsRow = styled(Row)`
-    position: absolute;
+    position: relative;
     width: 10em;
-    right: 4rem;
+    right: 0rem;
     justify-content: space-between;
     background-color: rgb(254,254,254, 0.94);
 
     ${(props) => props.section && css`
-      right: 0.5rem;
+      right: -4rem;
     `}
 `;
 
@@ -49,6 +54,11 @@ export const TaskWrapper = styled(Row)`
   align-items: center;
   border-bottom: 1px solid lightgray;
   padding: 0.6em 0em;
+
+  ${(props) => props.section && css`
+    margin-bottom: 0.6em;
+    padding: 0em;
+  `}
 
   & ${OptionsRow} {
     display: none;
@@ -68,6 +78,10 @@ export const TaskWrapper = styled(Row)`
         }
       }
     `}
+
+  ${(props) => props.modal && css`
+     border-bottom: 1px solid transparent;
+  `}
 `;
 
 export const TaskListWrapper = styled.div`

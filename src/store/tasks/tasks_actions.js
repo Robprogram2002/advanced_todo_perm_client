@@ -75,24 +75,24 @@ export const createSectionTask = createAsyncThunk(
 export const changeTasksOrder = createAsyncThunk(
   'tasks/change-order',
   async ({
-    entityId,
-    entityType,
-    taskId,
-    actualPosition,
-    newPosition,
+    entityId, entityType, taskId, actualPosition, newPosition,
   }) => {
     try {
-      const response = await API.patch('/tasks/re-order', {
-        entityId,
-        entityType,
-        taskId,
-        actualPosition,
-        newPosition,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await API.patch(
+        '/tasks/re-order',
+        {
+          entityId,
+          entityType,
+          taskId,
+          actualPosition,
+          newPosition,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
 
       if (response.status !== 200) {
         throw new Error('Somehting went worng, please try again');
@@ -110,3 +110,29 @@ export const changeTasksOrder = createAsyncThunk(
     }
   },
 );
+
+export const getTask = createAsyncThunk('task/getOne', async (taskId) => {
+  try {
+    const response = await API.get(`/tasks/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error('Somehting went worng, please try again');
+    }
+
+    console.log(response.data);
+
+    return {
+      task: response.data.task,
+    };
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('Something went wrong , please try again');
+    }
+  }
+});

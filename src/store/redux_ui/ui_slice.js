@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { signUp, singIn, meRequest } from '../user_actions';
-import { changeTasksOrder } from '../tasks/tasks_actions';
+import { changeTasksOrder, getTask } from '../tasks/tasks_actions';
 import { changeSectionsOrder } from '../projects/project_actions';
 
 const initialState = {
@@ -11,6 +11,7 @@ const initialState = {
   errorMessage: '',
   successMessage: '',
   showModal: false,
+  modalType: '',
   showSideMenu: true,
 };
 
@@ -21,11 +22,13 @@ const uiSlice = createSlice({
     stopHomeLoading(state) {
       state.homeLoading = false;
     },
-    openModal(state) {
+    openModal(state, action) {
       state.showModal = true;
+      state.modalType = action.payload.modalType;
     },
     closeModal(state) {
       state.showModal = false;
+      state.modalType = '';
     },
     openSideMenu(state) {
       state.showSideMenu = true;
@@ -90,6 +93,10 @@ const uiSlice = createSlice({
       state.errorMessage = '';
       state.success = false;
       state.successMessage = '';
+    });
+    builder.addCase(getTask.fulfilled, (state) => {
+      state.showModal = true;
+      state.modalType = 'task';
     });
   },
 });

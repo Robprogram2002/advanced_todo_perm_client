@@ -66,11 +66,11 @@ export const getProject = createAsyncThunk(
 
 export const createSection = createAsyncThunk(
   'project/section/create',
-  async ({ projectId, name }) => {
+  async ({ projectId, name, position }) => {
     try {
       const response = await API.post(
         `/proyect/${projectId}/section/create`,
-        { name },
+        { name, position },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -84,6 +84,7 @@ export const createSection = createAsyncThunk(
 
       return {
         section: response.data.section,
+        position,
       };
     } catch (error) {
       if (error.response) {

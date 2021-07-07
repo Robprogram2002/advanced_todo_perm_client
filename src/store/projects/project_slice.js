@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  createProject, getProject, createSection,
-} from './project_actions';
+import { createProject, getProject, createSection } from './project_actions';
 import { singIn, meRequest } from '../user_actions';
 import { createProjectTask, createSectionTask } from '../tasks/tasks_actions';
 
@@ -18,17 +16,37 @@ const projectSlice = createSlice({
       const newTasks = action.payload;
       state.project.Tasks = newTasks;
     },
+    UpdateSubTasksOrder(state, action) {
+      const { newSubTasks, taskId, sectionId } = action.payload;
+      const { Sections } = state.project;
+
+      if (sectionId) {
+        const index = Sections.findIndex(
+          (section) => section.uuid === sectionId,
+        );
+        const targetSection = Sections[index];
+
+        const taskIndex = targetSection.Tasks.findIndex(
+          (task) => task.uuid === taskId,
+        );
+        const targetTask = targetSection.Tasks[taskIndex];
+        targetTask.Tasks = newSubTasks;
+      } else {
+        const taskIndex = state.project.Tasks.findIndex(
+          (task) => task.uuid === taskId,
+        );
+        const targetTask = state.project.Tasks[taskIndex];
+        targetTask.Tasks = newSubTasks;
+      }
+    },
     updateSectionTasksOrder(state, action) {
       const { newTasks, sectionId } = action.payload;
       const { Sections } = state.project;
-      const index = Sections.findIndex(
-        (section) => section.uuid === sectionId,
-      );
+      const index = Sections.findIndex((section) => section.uuid === sectionId);
       const targetSection = Sections[index];
       targetSection.Tasks = newTasks;
     },
     updateSectionsOrder(state, action) {
-      console.log(action);
       const { project } = state;
       project.Sections = action.payload;
     },
@@ -55,14 +73,14 @@ const projectSlice = createSlice({
       state.project = action.payload.project;
     });
     builder.addCase(createSection.fulfilled, (state, action) => {
-      state.project.Sections.push(action.payload.section);
+      const { position, section } = action.payload;
+      const { Sections } = state.project;
+      Sections.splice(position, 0, section);
     });
     builder.addCase(createSectionTask.fulfilled, (state, action) => {
       const { Sections } = state.project;
       const { sectionId, task } = action.payload;
-      const index = Sections.findIndex(
-        (section) => section.uuid === sectionId,
-      );
+      const index = Sections.findIndex((section) => section.uuid === sectionId);
       const targetSection = Sections[index];
       targetSection.Tasks.push(task);
     });

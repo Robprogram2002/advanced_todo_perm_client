@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux';
 import {
   Switch, Route, useRouteMatch, useHistory,
 } from 'react-router-dom';
-import CreateProyectModal from '../Modals/CreateProyectModal';
 import Project from '../../../pages/Project';
+import ModalHandler from '../Modals/ModalHandler';
 
 const Feed = () => {
-  const uiState = useSelector((state) => state.uiState);
   const { redirectTo } = useSelector((state) => state.metaData);
   const { path } = useRouteMatch();
   const history = useHistory();
@@ -20,7 +19,7 @@ const Feed = () => {
 
   return (
     <section style={{ maxHeight: '90vh', overflowY: 'scroll', paddingBottom: '8rem' }}>
-      {uiState.showModal && <CreateProyectModal />}
+      <ModalHandler />
       <Switch>
         <Route path={`${path}/project/:projectId`} component={Project} exact />
       </Switch>

@@ -52,7 +52,7 @@ const SectionInputContainer = styled(TaskInputContainer)`
   }
 `;
 
-const AddSectionForm = ({ projectId }) => {
+const AddSectionForm = ({ projectId, position }) => {
   const [showInput, setShowInput] = useState(false);
   const [sectionName, setSectionName] = useState('');
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const AddSectionForm = ({ projectId }) => {
       return;
     }
 
-    dispatch(createSection({ projectId, name: sectionName }));
+    dispatch(createSection({ projectId, name: sectionName, position }));
     setShowInput(false);
     setSectionName('');
   };

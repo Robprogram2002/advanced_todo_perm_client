@@ -70,7 +70,7 @@ const Project = () => {
           </Row>
           <div style={{ height: '14px' }} />
           <TasksContainer projectId={projectId} Tasks={project.Tasks} />
-          <AddSectionRow projectId={projectId} />
+          <AddSectionRow projectId={projectId} position={0} />
           <SectionListContainer Sections={project.Sections} />
         </>
       )}
