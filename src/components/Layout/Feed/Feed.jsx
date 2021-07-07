@@ -21,7 +21,7 @@ const Feed = () => {
     <section style={{ maxHeight: '90vh', overflowY: 'scroll', paddingBottom: '8rem' }}>
       <ModalHandler />
       <Switch>
-        <Route path={`${path}/project/:projectId`} component={Project} exact />
+        <Route path={`${path}/project/:projectId`} component={Project} />
       </Switch>
     </section>
   );

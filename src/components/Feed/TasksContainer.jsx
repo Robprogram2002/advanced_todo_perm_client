@@ -6,16 +6,22 @@ import { useDispatch } from 'react-redux';
 import { CardContainer } from '../StyledComponents/ContainerStyles';
 import { TaskListWrapper } from '../StyledComponents/TaskStyles';
 import { changeTasksOrder } from '../../store/tasks/tasks_actions';
+import { taskActions } from '../../store/tasks/task_slice';
+// eslint-disable-next-line import/no-cycle
 import Task from './Task/Task';
 import { projectActions } from '../../store/projects/project_slice';
 import ProyectTask from '../Forms/Tasks/ProyectTask';
 
 export const dndTaskHandler = ({
-  result, dispatch, Tasks, sectionId,
+  result,
+  dispatch,
+  Tasks,
+  sectionId,
+  modal,
 }) => {
-  const {
-    destination, source, draggableId, type,
-  } = result;
+  const { destination, source, type } = result;
+  let { draggableId } = result;
+
   if (!destination) {
     return;
   }
@@ -23,6 +29,11 @@ export const dndTaskHandler = ({
   if (destination.index === source.index) {
     return;
   }
+
+  if (modal) {
+    [draggableId] = draggableId.split('_');
+  }
+
   const index = Tasks.findIndex((task) => task.uuid === draggableId);
   const dragTask = Tasks[index];
 
@@ -47,6 +58,11 @@ export const dndTaskHandler = ({
 
     entityType = 'Proyect';
   } else if (type === 'sub-task') {
+    dispatch(
+      taskActions.UpdateSubTasksOrder({
+        newSubTasks: newTasks,
+      }),
+    );
     dispatch(
       projectActions.UpdateSubTasksOrder({
         newSubTasks: newTasks,

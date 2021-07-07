@@ -8,6 +8,7 @@ import { TaskListWrapper } from '../StyledComponents/TaskStyles';
 import SubTask from './Task/SubTask';
 // eslint-disable-next-line import/no-cycle
 import { dndTaskHandler } from './TasksContainer';
+import ProyectTask from '../Forms/Tasks/ProyectTask';
 
 const SubTaskContainer = ({
   Tasks, taskId, sectionId, modal,
@@ -20,6 +21,7 @@ const SubTaskContainer = ({
       dispatch,
       Tasks,
       sectionId,
+      modal: !!modal,
     });
   };
 
@@ -30,7 +32,7 @@ const SubTaskContainer = ({
         background="#fdfdfd"
         style={{ paddingLeft: !modal ? '2rem' : '0rem' }}
       >
-        <Droppable droppableId="subtask_droppable" type="sub-task">
+        <Droppable droppableId={modal ? 'subtask_droppable_modal' : 'subtask_droppable'} type="sub-task">
           {(provided, { isDraggingOver }) => (
             <TaskListWrapper
               ref={provided.innerRef}
@@ -45,12 +47,21 @@ const SubTaskContainer = ({
                     index={index}
                     key={task.uuid}
                     isDragging={isDraggingOver}
+                    modal={modal}
                   />
                 ))}
               {provided.placeholder}
             </TaskListWrapper>
           )}
         </Droppable>
+        {modal && (
+          <div style={{
+            width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center',
+          }}
+          >
+            <ProyectTask taskId={taskId} />
+          </div>
+        ) }
       </CardContainer>
     </DragDropContext>
   );

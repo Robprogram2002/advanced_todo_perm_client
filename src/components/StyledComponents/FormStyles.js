@@ -26,9 +26,9 @@ export const FormButton = styled.button`
   color: whitesmoke;
   font-size: 1rem;
   text-align: center;
-  margin: 1rem;
   transition: all 0.4s ease;
-
+  margin: 0.3rem 1rem;
+  
   &:hover {
     transform: scale(1.02);
     cursor: pointer;

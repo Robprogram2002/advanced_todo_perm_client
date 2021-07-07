@@ -2,7 +2,9 @@ import React from 'react';
 import { GiPlainCircle } from 'react-icons/gi';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
-import { Link, Switch, Route } from 'react-router-dom';
+import {
+  NavLink, Switch, Route, useHistory,
+} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, CardContainer } from '../../StyledComponents/ContainerStyles';
 import TaskContent from '../../Feed/Task/TaskContent';
@@ -14,9 +16,10 @@ const TaskMenu = styled.menu`
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
   grid-template-rows: 28px;
+  border-bottom: 1px solid lightgray;
 `;
 
-const TaskMenuItem = styled(Link)`
+const TaskMenuItem = styled(NavLink)`
   height: 100%;
   width: 100%;
   display: flex;
@@ -27,7 +30,7 @@ const TaskMenuItem = styled(Link)`
   border-bottom: 1px solid transparent;
   text-decoration: none;
 
-  & .menuitem-active {
+  &.menuitem-active {
       font-weight: bold;
       border-bottom: 2px solid black;
       color: black;
@@ -42,7 +45,14 @@ const TaskMenuItem = styled(Link)`
 const TaskModalForm = () => {
   const { task, subTasks } = useSelector((state) => state.taskState);
   const { project } = useSelector((state) => state.proyects);
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  const closeModalHandler = (e) => {
+    e.preventDefault();
+    history.push(`/app/project/${project.uuid}`);
+    dispatch(uiActions.closeModal());
+  };
 
   return (
     <>
@@ -50,7 +60,6 @@ const TaskModalForm = () => {
         <Row start central>
           <GiPlainCircle
             style={{ color: 'yellow', margin: '0rem .6rem' }}
-            onClick={() => dispatch(uiActions.closeModal())}
           />
           <h4>
             {' '}
@@ -60,52 +69,56 @@ const TaskModalForm = () => {
         </Row>
         <AiOutlineClose
           style={{ height: '25px', width: '25px', cursor: 'pointer' }}
+          onClick={closeModalHandler}
         />
       </Row>
 
-      <div style={{ height: '15px' }} />
+      <TaskContent name={task.name} taskId={task.uuid} />
 
-      <TaskContent name={task.name} />
-      <div style={{ height: '100px' }} />
-
-      <CardContainer padding={0.5}>
+      <CardContainer>
         <TaskMenu>
           <TaskMenuItem
             to={`/app/project/${project.uuid}/tasks/${task.uuid}/sub-tasks`}
-            active="menuitem-active"
+            activeClassName="menuitem-active"
           >
             Sub-tasks
             <span>2</span>
           </TaskMenuItem>
           <TaskMenuItem
             to={`/app/project/${project.uuid}/tasks/${task.uuid}/comments`}
-            active="menuitem-active"
+            activeClassName="menuitem-active"
           >
             Comments
             <span>12</span>
           </TaskMenuItem>
           <TaskMenuItem
             to={`/app/project/${project.uuid}/tasks/${task.uuid}/activity`}
-            active="menuitem-active"
+            activeClassName="menuitem-active"
           >
             Activity
             <span>20</span>
           </TaskMenuItem>
         </TaskMenu>
-        <div style={{ height: '15px' }} />
-        <Switch>
-          <Route
-            path={`/app/project/${project.uuid}/tasks/${task.uuid}/sub-tasks`}
-            render={() => (
-              <SubTaskContainer
-                Tasks={subTasks}
-                taskId={task.uuid}
-                sectionId={task.entityType === 'Section' ? task.entityId : null}
-                modal
-              />
-            )}
-          />
-        </Switch>
+        <div style={{ height: '10px' }} />
+        <div style={{
+          overflowY: 'scroll', minHeight: '36vh', maxHeight: '36vh', paddingBottom: '1rem',
+        }}
+        >
+          <Switch>
+            <Route
+              path={`/app/project/${project.uuid}/tasks/${task.uuid}/sub-tasks`}
+              render={() => (
+                <SubTaskContainer
+                  Tasks={subTasks}
+                  taskId={task.uuid}
+                  sectionId={task.entityType === 'Section' ? task.entityId : null}
+                  modal
+                />
+              )}
+            />
+          </Switch>
+        </div>
+
       </CardContainer>
     </>
   );

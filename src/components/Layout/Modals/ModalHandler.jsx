@@ -6,7 +6,7 @@ import TaskModalForm from '../../Forms/Tasks/TaskModalForm';
 
 const ModalHandler = () => {
   const { showModal, modalType } = useSelector((state) => state.uiState);
-
+  console.log('show modal', showModal);
   let component;
   let width;
   switch (modalType) {
@@ -25,13 +25,8 @@ const ModalHandler = () => {
   }
 
   if (showModal) {
-    return (
-      <Modal width={width}>
-        {component}
-      </Modal>
-    );
+    return <Modal width={width}>{component}</Modal>;
   }
-
   return <div />;
 };
 

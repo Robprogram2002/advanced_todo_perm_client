@@ -72,6 +72,39 @@ export const createSectionTask = createAsyncThunk(
   },
 );
 
+export const createSubTask = createAsyncThunk(
+  'sub-task/create',
+  async ({ name, entityId }) => {
+    try {
+      const response = await API.post(
+        '/tasks/create',
+        {
+          name,
+          entityId,
+          entityType: 'Task',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
+      if (response.status !== 200) {
+        throw new Error('Somehting went worng, please try again');
+      }
+      return {
+        task: response.data.result,
+      };
+    } catch (error) {
+      if (error.response) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Something went wrong , please try again');
+      }
+    }
+  },
+);
+
 export const changeTasksOrder = createAsyncThunk(
   'tasks/change-order',
   async ({
@@ -136,3 +169,34 @@ export const getTask = createAsyncThunk('task/getOne', async (taskId) => {
     }
   }
 });
+
+export const updateTask = createAsyncThunk(
+  'task/update',
+  async ({ name, taskId }) => {
+    try {
+      const response = await API.patch(
+        `/tasks/${taskId}/update`,
+        {
+          name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
+      if (response.status !== 200) {
+        throw new Error('Somehting went worng, please try again');
+      }
+      return {
+        taskName: response.data.newTaskName,
+      };
+    } catch (error) {
+      if (error.response) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Something went wrong , please try again');
+      }
+    }
+  },
+);

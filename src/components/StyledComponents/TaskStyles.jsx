@@ -55,6 +55,10 @@ export const TaskWrapper = styled(Row)`
   border-bottom: 1px solid lightgray;
   padding: 0.6em 0em;
 
+  ${(props) => props.isModal && css`
+    border-bottom: 1px solid #eee;
+  `}
+
   ${(props) => props.section && css`
     margin-bottom: 0.6em;
     padding: 0em;

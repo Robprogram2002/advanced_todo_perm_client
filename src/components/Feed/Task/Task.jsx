@@ -32,7 +32,7 @@ const Task = ({
 
     dispatch(getTask(task.uuid));
 
-    history.push(`${history.location.pathname}/tasks/${task.uuid}`);
+    history.push(`${history.location.pathname}/tasks/${task.uuid}/sub-tasks`);
   };
 
   return (
@@ -45,7 +45,6 @@ const Task = ({
               central
               start
               style={{ cursor: 'pointer' }}
-              onClick={taskClickHandler}
             >
               <MoveIconWrapper {...provided.dragHandleProps}>
                 <BiMove className="drag_icon" />
@@ -55,7 +54,7 @@ const Task = ({
                 sub={task.Tasks.length > 0}
                 toggleSub={setShowSubTasks}
               />
-              <Paragraph>
+              <Paragraph onClick={taskClickHandler}>
                 {task.name}
                 {task.Tasks.length > 0 && (
                   <div

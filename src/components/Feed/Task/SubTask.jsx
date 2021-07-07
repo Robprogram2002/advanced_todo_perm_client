@@ -14,12 +14,14 @@ import { Row } from '../../StyledComponents/ContainerStyles';
 import TaskIcon from './TaskIcon';
 import TaskOptions from './TaskOptions';
 
-const SubTask = ({ task, index, isDragging }) => (
-  <Draggable draggableId={task.uuid} index={index}>
+const SubTask = ({
+  task, index, isDragging, modal,
+}) => (
+  <Draggable draggableId={modal ? `${task.uuid}_modal` : task.uuid} index={index}>
     {(provided) => (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <div {...provided.draggableProps} ref={provided.innerRef}>
-        <TaskWrapper isDragging={isDragging}>
+        <TaskWrapper isModal={modal} isDragging={isDragging}>
           <Row central start style={{ cursor: 'pointer' }}>
             <MoveIconWrapper {...provided.dragHandleProps}>
               <BiMove className="drag_icon" />
@@ -40,6 +42,21 @@ const SubTask = ({ task, index, isDragging }) => (
               >
                 <RiStackshareLine />
                 <span>{`0/${task.Tasks.length}`}</span>
+                {task.Tasks.length > 0 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '50px',
+                      justifyContent: 'center',
+                      alignItemes: 'space-around',
+                      color: 'gray',
+                      fontSize: '0.8rem',
+                    }}
+                  >
+                    <RiStackshareLine />
+                    <span>{`0/${task.Tasks.length}`}</span>
+                  </div>
+                )}
               </div>
               )}
             </Paragraph>
@@ -55,6 +72,11 @@ SubTask.propTypes = {
   task: PropTypes.element.isRequired,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  modal: PropTypes.bool,
+};
+
+SubTask.defaultProps = {
+  modal: false,
 };
 
 export default SubTask;

@@ -13,7 +13,9 @@ import {
 } from '../../StyledComponents/ContainerStyles';
 import { IconCirc, IconSpan } from '../../StyledComponents/styled';
 import NavIcon from '../../Layout/Navigation/NavIcon';
-import { createProjectTask, createSectionTask } from '../../../store/tasks/tasks_actions';
+import {
+  createProjectTask, createSectionTask, createSubTask, updateTask,
+} from '../../../store/tasks/tasks_actions';
 import { TaskInputContainer } from '../../StyledComponents/TaskStyles';
 
 const Container = styled.div`
@@ -44,10 +46,12 @@ const Container = styled.div`
   }
 `;
 
+const ProyectTask = ({
 // eslint-disable-next-line react/prop-types
-const ProyectTask = ({ projectId, sectionId }) => {
-  const [showInput, setShowInput] = useState(false);
-  const [taskName, setTaskName] = useState('');
+  projectId, sectionId, taskId, name, setFn,
+}) => {
+  const [showInput, setShowInput] = useState(!!name);
+  const [taskName, setTaskName] = useState(name || '');
   const dispatch = useDispatch();
 
   const textInputHandler = (e) => {
@@ -59,21 +63,27 @@ const ProyectTask = ({ projectId, sectionId }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(sectionId);
+    if (name) {
+      dispatch(updateTask({ name: taskName, taskId }));
+      setFn(false);
+      return;
+    }
 
-    if (sectionId === null || sectionId === undefined) {
-      dispatch(
-        createProjectTask({
-          name: taskName,
-          entityId: projectId,
-        }),
-      );
-    } else {
+    if (sectionId) {
       dispatch(
         createSectionTask({
           name: taskName,
           // eslint-disable-next-line react/prop-types
           entityId: sectionId,
+        }),
+      );
+    } else if (taskId) {
+      dispatch(createSubTask({ name: taskName, entityId: taskId }));
+    } else {
+      dispatch(
+        createProjectTask({
+          name: taskName,
+          entityId: projectId,
         }),
       );
     }
@@ -83,7 +93,7 @@ const ProyectTask = ({ projectId, sectionId }) => {
   };
 
   return (
-    <>
+    <div style={{ width: taskId ? '94%' : '100%' }}>
       {!showInput && (
         <Container onClick={() => setShowInput(true)} margin>
           <div style={{ height: '1em', width: '1.55em' }} />
@@ -94,7 +104,7 @@ const ProyectTask = ({ projectId, sectionId }) => {
         </Container>
       )}
       {showInput && (
-        <Column style={{ margin: '1rem 0rem' }}>
+        <Column style={{ marginTop: '1rem' }}>
           <TaskInputContainer>
             <TastTextarea
               rows="3"
@@ -105,14 +115,14 @@ const ProyectTask = ({ projectId, sectionId }) => {
               onChange={textInputHandler}
             />
             <Row central between>
-              <Row width={35}>
-                <IconSpan>
+              <Row start>
+                <IconSpan small>
                   <AiOutlineCalendar
                     style={{ height: '20px', width: '20px' }}
                   />
                   <span> Schedule </span>
                 </IconSpan>
-                <IconSpan>
+                <IconSpan small>
                   <RiCheckboxBlankCircleFill
                     style={{ height: '15px', width: '15px' }}
                   />
@@ -120,39 +130,45 @@ const ProyectTask = ({ projectId, sectionId }) => {
                 </IconSpan>
               </Row>
               <Row width={25}>
-                <NavIcon Icon={AiOutlineTag} aside />
-                <NavIcon Icon={FiFlag} aside />
-                <NavIcon Icon={GiAlarmClock} aside />
-                <NavIcon Icon={GoCommentDiscussion} aside />
+                <NavIcon Icon={AiOutlineTag} aside size={18} />
+                <NavIcon Icon={FiFlag} aside size={18} />
+                <NavIcon Icon={GiAlarmClock} aside size={18} />
+                <NavIcon Icon={GoCommentDiscussion} aside size={18} />
               </Row>
             </Row>
           </TaskInputContainer>
-          <Row width={30}>
+          <Row start>
             <FormButton
               type="submit"
               background="crimson"
-              width={40}
+              width={12}
               height={35}
               radius={8}
               disable={() => taskName === ''}
               onClick={submitHandler}
             >
-              Add Task
+              {name ? 'Update' : 'Add Task'}
             </FormButton>
             <FormButton
               type="submit"
               background="gray"
-              width={40}
+              width={12}
               height={35}
               radius={8}
-              onClick={() => setShowInput(false)}
+              onClick={() => {
+                if (name) {
+                  setFn(false);
+                } else {
+                  setShowInput(false);
+                }
+              }}
             >
               Cancel
             </FormButton>
           </Row>
         </Column>
       )}
-    </>
+    </div>
   );
 };
 

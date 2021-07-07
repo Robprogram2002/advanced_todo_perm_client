@@ -80,4 +80,8 @@ export const IconSpan = styled(NavIconContainer)`
     background-color: #ebebeb;
     color: black;
   }
+
+  ${(props) => props.small && css`
+    padding: 4px 8px;
+  `}
 `;
